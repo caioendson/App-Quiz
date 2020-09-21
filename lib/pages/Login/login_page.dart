@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_teste/pages/Home/home_page.dart';
 import 'package:flutter_teste/pages/Register/register_page.dart';
 
 class Login extends StatelessWidget {
@@ -73,7 +74,8 @@ class Login extends StatelessWidget {
                       ),
                       SizedBox(height: 20),
                       RaisedButton(
-                        onPressed: () {},
+                        onPressed: () => Navigator.pushReplacement(context,
+                            MaterialPageRoute(builder: (cnt) => Home())),
                         color: Colors.green,
                         textColor: Colors.white,
                         child: Row(
