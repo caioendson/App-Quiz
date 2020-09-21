@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_teste/pages/Login/login_page.dart';
 import 'package:flutter_teste/pages/Register/register_page.dart';
 
-class Home extends StatelessWidget {
+class Welcome extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(

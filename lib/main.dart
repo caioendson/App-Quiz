@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_teste/pages/Home/home_page.dart';
+import 'package:flutter_teste/pages/Welcome/welcome_page.dart';
 
 void main() {
   runApp(MyApp());
@@ -39,7 +39,7 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Home(),
+      body: Welcome(),
     );
   }
 }
