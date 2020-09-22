@@ -18,11 +18,15 @@ class Home extends StatelessWidget {
           ),
         ),
         body: Container(
-          padding: EdgeInsets.all(20),
+          padding: EdgeInsets.all(40),
           child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Expanded(child: Placeholder()),
-              FlatButton(
+              Expanded(
+                  child: Column(
+                children: [Text('Olá usuário')],
+              )),
+              RaisedButton(
                 color: Colors.green,
                 textColor: Colors.white,
                 onPressed: () => Navigator.push(
@@ -35,7 +39,19 @@ class Home extends StatelessWidget {
                 ),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
-                  children: [Text('JOGAR')],
+                  children: [
+                    Container(
+                      padding:
+                          EdgeInsets.symmetric(vertical: 20, horizontal: 15),
+                      child: Text(
+                        'JOGAR',
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 22,
+                        ),
+                      ),
+                    )
+                  ],
                 ),
               )
             ],

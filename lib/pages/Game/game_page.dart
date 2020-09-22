@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_teste/models/QuestionModel.dart';
+import 'package:flutter_teste/pages/Game/result_widget.dart';
 
 class Game extends StatefulWidget {
   final List<Question> questions;
@@ -16,10 +17,15 @@ class _GameState extends State<Game> {
   final Random rnd = new Random();
   int correctAnswersCount = 0;
   int wrongAnswersCount = 0;
+  DateTime timeInit;
+  DateTime timeToRecord;
+  Duration record;
   final PageController _controllerPageView = new PageController();
 
   @override
   void initState() {
+    this.timeInit = DateTime.now();
+    this.timeToRecord = DateTime.now();
     super.initState();
   }
 
@@ -31,6 +37,11 @@ class _GameState extends State<Game> {
   }
 
   void _onPressed(String correctAnswer, String pressedAnswer) {
+    Duration _record = DateTime.now().difference(this.timeToRecord);
+    if (this.record == null || this.record > _record) {
+      setState(() => this.record = _record);
+    }
+    setState(() => this.timeToRecord = DateTime.now());
     if (correctAnswer == pressedAnswer) {
       setState(() => correctAnswersCount += 1);
     } else {
@@ -51,59 +62,12 @@ class _GameState extends State<Game> {
         itemBuilder: (cntx, inx) => inx == super.widget.questions.length
             ? Container(
                 padding: EdgeInsets.only(top: 50),
-                child: Column(
-                  children: [
-                    Container(
-                      color: Colors.white,
-                      margin: EdgeInsets.all(10),
-                      padding:
-                          EdgeInsets.symmetric(vertical: 15, horizontal: 10),
-                      child: Row(
-                        children: [
-                          Expanded(child: Text('Respostas corretas')),
-                          Text('$correctAnswersCount'),
-                        ],
-                      ),
-                    ),
-                    Container(
-                      color: Colors.white,
-                      margin: EdgeInsets.all(10),
-                      padding:
-                          EdgeInsets.symmetric(vertical: 15, horizontal: 10),
-                      child: Row(
-                        children: [
-                          Expanded(child: Text('Respostas incorretas')),
-                          Text('$wrongAnswersCount'),
-                        ],
-                      ),
-                    ),
-                    Container(
-                      color: Colors.white,
-                      margin: EdgeInsets.all(10),
-                      padding:
-                          EdgeInsets.symmetric(vertical: 15, horizontal: 10),
-                      child: Row(
-                        children: [
-                          Expanded(child: Text('Tempo gasto da jogada')),
-                          Text('4'),
-                        ],
-                      ),
-                    ),
-                    Container(
-                      color: Colors.white,
-                      margin: EdgeInsets.all(10),
-                      padding:
-                          EdgeInsets.symmetric(vertical: 15, horizontal: 10),
-                      child: Row(
-                        children: [
-                          Expanded(child: Text('Melhor tempo de uma jogada')),
-                          Text('4'),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-              )
+                child: Result(
+                  correctAnswersCount: this.correctAnswersCount,
+                  wrongAnswersCount: this.wrongAnswersCount,
+                  elapsedTime: DateTime.now().difference(timeInit),
+                  recordTime: record,
+                ))
             : Container(
                 padding: EdgeInsets.only(top: 50),
                 child: Column(
@@ -114,7 +78,6 @@ class _GameState extends State<Game> {
                       padding: EdgeInsets.all(20),
                       child: Text(
                         super.widget.questions.elementAt(inx).title,
-                        textWidthBasis: TextWidthBasis.parent,
                         textScaleFactor: 2,
                         style: TextStyle(
                           backgroundColor: Colors.grey[800],
@@ -123,26 +86,33 @@ class _GameState extends State<Game> {
                         ),
                       ),
                     ),
-                    Container(
-                      padding: EdgeInsets.all(40),
-                      child: Column(
-                        children: randomAnswers(inx)
-                            .map((e) => Container(
-                                  margin: EdgeInsets.only(top: 15),
-                                  child: FlatButton(
+                    Expanded(
+                      child: Container(
+                        padding: EdgeInsets.all(40),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: randomAnswers(inx)
+                              .map((btnText) => Container(
                                     color: Colors.white,
-                                    onPressed: () => _onPressed(
-                                      super
-                                          .widget
-                                          .questions
-                                          .elementAt(inx)
-                                          .correctAnswer,
-                                      e,
+                                    margin: EdgeInsets.only(top: 10),
+                                    padding: EdgeInsets.all(15),
+                                    child: FlatButton(
+                                      onPressed: () => _onPressed(
+                                        super
+                                            .widget
+                                            .questions
+                                            .elementAt(inx)
+                                            .correctAnswer,
+                                        btnText,
+                                      ),
+                                      child: Text(
+                                        btnText,
+                                        style: TextStyle(),
+                                      ),
                                     ),
-                                    child: Text(e),
-                                  ),
-                                ))
-                            .toList(),
+                                  ))
+                              .toList(),
+                        ),
                       ),
                     ),
                   ],
