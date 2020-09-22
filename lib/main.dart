@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_teste/models/QuestionModel.dart';
+import 'package:flutter_teste/pages/Home/home_page.dart';
 import 'package:flutter_teste/pages/Welcome/welcome_page.dart';
+import 'package:provider/provider.dart';
 
 void main() {
   runApp(MyApp());
@@ -16,7 +19,10 @@ class MyApp extends StatelessWidget {
         primaryColor: Colors.blue,
         backgroundColor: Colors.blue[400],
       ),
-      home: MyHomePage(title: 'Educa IoT'),
+      home: ChangeNotifierProvider(
+        create: (cntx) => QuestionModel(),
+        child: MyHomePage(title: 'Educa IoT'),
+      ),
     );
   }
 }
@@ -39,7 +45,7 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Welcome(),
+      body: Home(),
     );
   }
 }
