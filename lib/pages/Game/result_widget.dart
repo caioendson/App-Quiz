@@ -36,7 +36,10 @@ class Result extends StatelessWidget {
             children: _data
                 .map(
                   (arr) => Container(
-                    color: Colors.white,
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(25),
+                    ),
                     margin: EdgeInsets.all(10),
                     padding: EdgeInsets.symmetric(vertical: 25, horizontal: 20),
                     child: Row(
@@ -69,6 +72,9 @@ class Result extends StatelessWidget {
           child: FlatButton(
             onPressed: () => Navigator.pop(context),
             color: Colors.red,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(25),
+            ),
             textColor: Colors.white,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,

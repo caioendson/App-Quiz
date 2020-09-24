@@ -1,13 +1,22 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_teste/pages/Home/home_page.dart';
-import 'package:flutter_teste/pages/Register/register_page.dart';
 
-class Login extends StatelessWidget {
+class Login extends StatefulWidget {
+  final Function loginFn;
+  @override
+  _LoginState createState() => _LoginState();
+
+  Login({Key key, this.loginFn}) : super(key: key);
+}
+
+class _LoginState extends State<Login> {
+  TextEditingController emailController = TextEditingController();
+  TextEditingController passwordController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Theme.of(context).backgroundColor,
-      body: Padding(
+      body: Container(
         padding: EdgeInsets.all(20),
         child: Column(
           children: [
@@ -41,10 +50,11 @@ class Login extends StatelessWidget {
                           ],
                         )
                       : SizedBox(),
-                  SizedBox(height: 50),
+                  SizedBox(height: 15),
                   Column(
                     children: [
                       TextField(
+                        controller: emailController,
                         keyboardType: TextInputType.emailAddress,
                         decoration: InputDecoration(
                           border: OutlineInputBorder(
@@ -53,12 +63,13 @@ class Login extends StatelessWidget {
                               topRight: Radius.circular(5),
                             ),
                           ),
-                          hintText: 'Email',
+                          hintText: 'Email ou Nome',
                           fillColor: Colors.white,
                           filled: true,
                         ),
                       ),
                       TextField(
+                        controller: passwordController,
                         obscureText: true,
                         decoration: InputDecoration(
                           border: OutlineInputBorder(
@@ -73,42 +84,33 @@ class Login extends StatelessWidget {
                         ),
                       ),
                       SizedBox(height: 20),
-                      RaisedButton(
-                        onPressed: () => Navigator.pushReplacement(context,
-                            MaterialPageRoute(builder: (cnt) => Home())),
-                        color: Colors.green,
-                        textColor: Colors.white,
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text(
-                              'INICIAR',
-                              style: TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            )
-                          ],
-                        ),
-                      ),
-                      FlatButton(
-                        onPressed: () {},
-                        child: Row(
-                          children: [Text('esqueceu sua senha?')],
-                        ),
-                      )
                     ],
-                  )
+                  ),
+                  RaisedButton(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(25),
+                    ),
+                    onPressed: () => this
+                        .widget
+                        .loginFn(emailController.text, passwordController.text),
+                    color: Colors.green,
+                    textColor: Colors.white,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          'REGISTRAR E ENTRAR',
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        )
+                      ],
+                    ),
+                  ),
                 ],
               ),
             ),
-            FlatButton(
-              onPressed: () => Navigator.pushReplacement(
-                  context, MaterialPageRoute(builder: (cnt) => Register())),
-              child: Row(
-                children: [Text('Não possui uma conta? Crie uma.')],
-              ),
-            )
           ],
         ),
       ),

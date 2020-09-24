@@ -93,7 +93,10 @@ class _GameState extends State<Game> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: randomAnswers(inx)
                               .map((btnText) => Container(
-                                    color: Colors.white,
+                                    decoration: BoxDecoration(
+                                      color: Colors.white,
+                                      borderRadius: BorderRadius.circular(25),
+                                    ),
                                     margin: EdgeInsets.only(top: 10),
                                     padding: EdgeInsets.all(15),
                                     child: FlatButton(
