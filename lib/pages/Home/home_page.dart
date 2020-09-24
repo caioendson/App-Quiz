@@ -2,33 +2,60 @@ import 'package:flutter/material.dart';
 import 'package:flutter_teste/models/QuestionModel.dart';
 import 'package:flutter_teste/pages/Game/game_page.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class Home extends StatelessWidget {
+  final Future<SharedPreferences> _pref = SharedPreferences.getInstance();
+  final Function exitFn;
+
+  Home({Key key, this.exitFn}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return Consumer<QuestionModel>(
       builder: (_cntx, questionModel, child) => Scaffold(
+        backgroundColor: Theme.of(context).backgroundColor,
         appBar: AppBar(
           leading: SizedBox(),
           centerTitle: true,
-          actions: [],
-          title: Image.asset(
-            'assets/images/logo.png',
-            height: 50,
-          ),
+          actions: [
+            IconButton(
+              icon: Icon(Icons.exit_to_app),
+              onPressed: () => exitFn(),
+            ),
+          ],
+          title: Image.asset('assets/images/logo.png', height: 50),
         ),
         body: Container(
           padding: EdgeInsets.all(40),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
+              Text(
+                'Teste seu conhecimento e vire um expert em IoT.',
+                style: TextStyle(
+                  fontSize: 30,
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
               Expanded(
-                  child: Column(
-                children: [Text('Olá usuário')],
-              )),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    Image.asset(
+                      'assets/images/logo.png',
+                      height: 150,
+                    ),
+                  ],
+                ),
+              ),
               RaisedButton(
                 color: Colors.green,
                 textColor: Colors.white,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(25),
+                ),
                 onPressed: () => Navigator.push(
                   context,
                   MaterialPageRoute(
