@@ -4,11 +4,27 @@ import 'package:flutter_teste/pages/Game/game_page.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class Home extends StatelessWidget {
-  final Future<SharedPreferences> _pref = SharedPreferences.getInstance();
+class Home extends StatefulWidget {
   final Function exitFn;
 
   Home({Key key, this.exitFn}) : super(key: key);
+
+  @override
+  _HomeState createState() => _HomeState();
+}
+
+class _HomeState extends State<Home> {
+  final Future<SharedPreferences> _pref = SharedPreferences.getInstance();
+  String userEmail;
+  @override
+  void initState() {
+    _pref.then((prefs) {
+      setState(() {
+        userEmail = prefs.getString('EducaIoT:email');
+      });
+    });
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -21,7 +37,7 @@ class Home extends StatelessWidget {
           actions: [
             IconButton(
               icon: Icon(Icons.exit_to_app),
-              onPressed: () => exitFn(),
+              onPressed: () => widget.exitFn(),
             ),
           ],
           title: Image.asset('assets/images/logo.png', height: 50),
@@ -31,12 +47,15 @@ class Home extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Text(
-                'Teste seu conhecimento e vire um expert em IoT.',
-                style: TextStyle(
-                  fontSize: 30,
-                  color: Colors.white,
-                  fontWeight: FontWeight.bold,
+              FittedBox(
+                fit: BoxFit.fitWidth,
+                child: Text(
+                  'Olá $userEmail, torne-se um expert em IoT.',
+                  style: TextStyle(
+                    fontSize: 24,
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
               ),
               Expanded(

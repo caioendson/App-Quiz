@@ -39,7 +39,7 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
-  bool isLoged = false;
+  bool isLoged;
 
   @override
   void initState() {
@@ -57,17 +57,17 @@ class _MyHomePageState extends State<MyHomePage> {
 
   _loginFn(String email, String password) async {
     final prefs = await _prefs;
-    final storagedEmail = prefs.getString('EducaIot:email');
-    final storagedPassword = prefs.getString('EducaIot:password');
+    final storagedEmail = prefs.getString('EducaIoT:email');
+    final storagedPassword = prefs.getString('EducaIoT:password');
     print('email: $email ($storagedEmail) pass: $password ($storagedPassword)');
     if (storagedPassword != null && storagedEmail != null) {
       if (storagedEmail == email && storagedPassword == password) {
         setState(() => isLoged = true);
-        prefs.setBool('EducaIot:isLoged', true);
+        prefs.setBool('EducaIoT:isLoged', true);
       }
     } else {
-      prefs.setString('EducaIot:email', email);
-      prefs.setString('EducaIot:password', password);
+      prefs.setString('EducaIoT:email', email);
+      prefs.setString('EducaIoT:password', password);
       _loginFn(email, password);
     }
   }
@@ -75,7 +75,14 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: isLoged ? Home(exitFn: _exitFn) : Login(loginFn: _loginFn),
+      backgroundColor: Theme.of(context).backgroundColor,
+      body: isLoged == null
+          ? Center(
+              child: CircularProgressIndicator(),
+            )
+          : isLoged
+              ? Home(exitFn: _exitFn)
+              : Login(loginFn: _loginFn),
     );
   }
 }
