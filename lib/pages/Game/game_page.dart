@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
@@ -20,23 +21,43 @@ class _GameState extends State<Game> {
   DateTime timeInit;
   DateTime timeToRecord;
   Duration record;
+  String _pressedAnswer;
+  String _correctAnswer;
+  List<List<String>> _randomizedAnswers = [];
+  bool _blockActions = false;
   final PageController _controllerPageView = new PageController();
 
   @override
   void initState() {
+    randomAnswers();
     this.timeInit = DateTime.now();
     this.timeToRecord = DateTime.now();
     super.initState();
   }
 
-  List<String> randomAnswers(int inx) {
-    var question = super.widget.questions.elementAt(inx);
-    var wrongs = question.wrongAnswers.toList();
-    wrongs.insert(rnd.nextInt(wrongs.length + 1), question.correctAnswer);
-    return wrongs;
+  void randomAnswers() {
+    for (var question in super.widget.questions) {
+      var wrongs = question.wrongAnswers.toList();
+      wrongs.insert(rnd.nextInt(wrongs.length + 1), question.correctAnswer);
+      this._randomizedAnswers.add(wrongs);
+    }
+  }
+
+  Color _colorizeButton(String str) {
+    if (str == _correctAnswer)
+      return Colors.green[200];
+    else if (_pressedAnswer == str) return Colors.red[200];
+    return Colors.white;
   }
 
   void _onPressed(String correctAnswer, String pressedAnswer) {
+    if (_blockActions) return null;
+
+    setState(() {
+      _correctAnswer = correctAnswer;
+      _pressedAnswer = pressedAnswer;
+      _blockActions = true;
+    });
     Duration _record = DateTime.now().difference(this.timeToRecord);
     if (this.record == null || this.record > _record) {
       setState(() => this.record = _record);
@@ -47,8 +68,14 @@ class _GameState extends State<Game> {
     } else {
       setState(() => wrongAnswersCount += 1);
     }
-    _controllerPageView.nextPage(
-        duration: Duration(milliseconds: 500), curve: Curves.ease);
+    Timer(Duration(seconds: 2), () {
+      _controllerPageView.nextPage(
+          duration: Duration(milliseconds: 500), curve: Curves.ease);
+      setState(() {
+        _pressedAnswer = null;
+        _blockActions = false;
+      });
+    });
   }
 
   @override
@@ -78,7 +105,7 @@ class _GameState extends State<Game> {
                       padding: EdgeInsets.all(20),
                       child: Text(
                         super.widget.questions.elementAt(inx).title,
-                        textScaleFactor: 2,
+                        textScaleFactor: 1.5,
                         style: TextStyle(
                           backgroundColor: Colors.grey[800],
                           color: Colors.white,
@@ -91,14 +118,10 @@ class _GameState extends State<Game> {
                         padding: EdgeInsets.all(40),
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
-                          children: randomAnswers(inx)
+                          children: _randomizedAnswers
+                              .elementAt(inx)
                               .map((btnText) => Container(
-                                    decoration: BoxDecoration(
-                                      color: Colors.white,
-                                      borderRadius: BorderRadius.circular(25),
-                                    ),
-                                    margin: EdgeInsets.only(top: 10),
-                                    padding: EdgeInsets.all(15),
+                                    margin: EdgeInsets.only(bottom: 10),
                                     child: FlatButton(
                                       onPressed: () => _onPressed(
                                         super
@@ -108,10 +131,15 @@ class _GameState extends State<Game> {
                                             .correctAnswer,
                                         btnText,
                                       ),
-                                      child: Text(
-                                        btnText,
-                                        style: TextStyle(),
+                                      color: _colorizeButton(btnText),
+                                      padding: EdgeInsets.symmetric(
+                                        vertical: 20,
+                                        horizontal: 10,
                                       ),
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(25),
+                                      ),
+                                      child: Text(btnText, style: TextStyle()),
                                     ),
                                   ))
                               .toList(),

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_teste/models/QuestionModel.dart';
 import 'package:flutter_teste/pages/Home/home_page.dart';
-import 'package:flutter_teste/pages/Login/login_page.dart';
+import 'package:flutter_teste/pages/Welcome/welcome_page.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -55,20 +55,15 @@ class _MyHomePageState extends State<MyHomePage> {
     setState(() => isLoged = false);
   }
 
-  _loginFn(String email, String password) async {
+  _loginFn(String email, String password, BuildContext cnt) async {
     final prefs = await _prefs;
     final storagedEmail = prefs.getString('EducaIoT:email');
     final storagedPassword = prefs.getString('EducaIoT:password');
-    print('email: $email ($storagedEmail) pass: $password ($storagedPassword)');
-    if (storagedPassword != null && storagedEmail != null) {
-      if (storagedEmail == email && storagedPassword == password) {
-        setState(() => isLoged = true);
-        prefs.setBool('EducaIoT:isLoged', true);
-      }
-    } else {
-      prefs.setString('EducaIoT:email', email);
-      prefs.setString('EducaIoT:password', password);
-      _loginFn(email, password);
+    print('$storagedEmail   $storagedPassword');
+    if (storagedEmail == email.trim() && storagedPassword == password.trim()) {
+      setState(() => isLoged = true);
+      prefs.setBool('EducaIoT:isLoged', true);
+      Navigator.pop(cnt);
     }
   }
 
@@ -82,7 +77,7 @@ class _MyHomePageState extends State<MyHomePage> {
             )
           : isLoged
               ? Home(exitFn: _exitFn)
-              : Login(loginFn: _loginFn),
+              : Welcome(loginFn: _loginFn),
     );
   }
 }

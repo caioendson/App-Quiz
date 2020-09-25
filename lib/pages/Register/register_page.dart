@@ -11,11 +11,28 @@ class Register extends StatefulWidget {
 }
 
 class _RegisterState extends State<Register> {
+  final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
+  final _formKey = GlobalKey<FormState>();
+
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
   TextEditingController nameController = TextEditingController();
 
-  final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
+  _registerPressed() async {
+    final prefs = await _prefs;
+    if (_formKey.currentState.validate()) {
+      await prefs.setString('EducaIoT:email', emailController.text.trim());
+      await prefs.setString(
+          'EducaIoT:password', passwordController.text.trim());
+      await prefs.setString('EducaIoT:name', nameController.text.trim());
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (_cntx) => Login(loginFn: this.widget.loginFn),
+        ),
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -28,42 +45,47 @@ class _RegisterState extends State<Register> {
           ),
         ),
         body: Padding(
-          padding: EdgeInsets.all(20),
+          padding: EdgeInsets.only(bottom: 20, left: 20, right: 20),
           child: Column(
             children: [
               Expanded(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    TextField(
-                      controller: nameController,
-                      decoration: InputDecoration(hintText: 'Nome de usuário'),
-                    ),
-                    SizedBox(height: 20),
-                    TextField(
-                      controller: emailController,
-                      decoration: InputDecoration(hintText: 'Email'),
-                    ),
-                    SizedBox(height: 20),
-                    TextField(
-                      controller: passwordController,
-                      decoration: InputDecoration(hintText: 'Senha'),
-                    ),
-                  ],
+                child: Form(
+                  key: _formKey,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      TextFormField(
+                        controller: nameController,
+                        decoration:
+                            InputDecoration(hintText: 'Nome de usuário'),
+                        validator: (str) =>
+                            str.isEmpty ? 'O nome não pode ser vazio' : null,
+                      ),
+                      TextFormField(
+                        controller: emailController,
+                        decoration: InputDecoration(hintText: 'Email'),
+                        validator: (str) {
+                          final RegExp emailRegex = new RegExp(
+                            r'\w*@\w*.com',
+                            caseSensitive: false,
+                          );
+                          return emailRegex.hasMatch(str)
+                              ? null
+                              : 'Email inválido';
+                        },
+                      ),
+                      TextFormField(
+                        controller: passwordController,
+                        decoration: InputDecoration(hintText: 'Senha'),
+                        validator: (str) =>
+                            str.isEmpty ? 'A senha não pode ser vazia' : null,
+                      ),
+                    ],
+                  ),
                 ),
               ),
               RaisedButton(
-                onPressed: () async {
-                  final prefs = await _prefs;
-                  await prefs.setString('EducaIot:email', emailController.text);
-                  await prefs.setString(
-                      'EducaIot:password', passwordController.text);
-                  Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(
-                          builder: (_cntx) =>
-                              Login(loginFn: this.widget.loginFn)));
-                },
+                onPressed: _registerPressed,
                 color: Colors.green,
                 textColor: Colors.white,
                 shape: RoundedRectangleBorder(

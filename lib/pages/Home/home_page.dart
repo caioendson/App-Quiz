@@ -15,12 +15,12 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   final Future<SharedPreferences> _pref = SharedPreferences.getInstance();
-  String userEmail;
+  String userName;
   @override
   void initState() {
     _pref.then((prefs) {
       setState(() {
-        userEmail = prefs.getString('EducaIoT:email');
+        userName = prefs.getString('EducaIoT:name');
       });
     });
     super.initState();
@@ -50,7 +50,7 @@ class _HomeState extends State<Home> {
               FittedBox(
                 fit: BoxFit.fitWidth,
                 child: Text(
-                  'Olá $userEmail, torne-se um expert em IoT.',
+                  'Olá $userName, torne-se um expert em IoT.',
                   style: TextStyle(
                     fontSize: 24,
                     color: Colors.white,
