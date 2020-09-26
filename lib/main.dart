@@ -51,7 +51,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   _exitFn() async {
     final prefs = await _prefs;
-    prefs.clear();
+    prefs.setBool('EducaIoT:isLoged', false);
     setState(() => isLoged = false);
   }
 
