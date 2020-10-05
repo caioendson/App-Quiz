@@ -1,4 +1,7 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_teste/service/RealtimeDBApi.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class Login extends StatefulWidget {
@@ -15,6 +18,8 @@ class _LoginState extends State<Login> {
   SharedPreferences prefs;
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
+  String _emailValidation;
+  String _passwordValidation;
 
   @override
   void initState() {
@@ -22,25 +27,44 @@ class _LoginState extends State<Login> {
     super.initState();
   }
 
-  _emailValidator(String str) {
-    var isValidate;
-    var email = prefs.getString('EducaIoT:email');
-    print('$email');
-    if (email == null)
-      isValidate = 'Email não cadastrado';
-    else if (email != str) isValidate = 'Email incorreto';
-    return isValidate;
+  _emailValidator(String email) {
+    if (email == '{}') {
+      setState(() {
+        _emailValidation = 'Email não cadastrado';
+      });
+    } else {
+      setState(() {
+        _emailValidation = null;
+      });
+    }
   }
 
-  _passwordValidator(String str) {
-    var isValidate;
-    var password = prefs.getString('EducaIoT:password');
-    print('$password');
+  _passwordValidator(String pass) {
+    if (pass != passwordController.text.trim()) {
+      setState(() {
+        _passwordValidation = 'Senha incorreta';
+      });
+    } else {
+      setState(() {
+        _passwordValidation = null;
+      });
+    }
+  }
 
-    if (password == null)
-      isValidate = 'Senha não cadastrada';
-    else if (password != str) isValidate = 'Senha incorreta';
-    return isValidate;
+  _login() async {
+    var res = await RealtimeDBApi.api.get(
+        '/users.json?orderBy="email"&equalTo="${emailController.text.trim()}"');
+    _emailValidator(res.data.toString());
+    var id = res.data.keys.toList().elementAt(0);
+    _passwordValidator((res.data)[id]['password']);
+    if (_formKey.currentState.validate()) {
+      this.widget.loginFn(
+            emailController.text,
+            passwordController.text,
+            (res.data)[id]['name'],
+            context,
+          );
+    }
   }
 
   @override
@@ -104,10 +128,10 @@ class _LoginState extends State<Login> {
                               fontWeight: FontWeight.bold,
                             ),
                           ),
-                          validator: (str) => _emailValidator(str),
+                          validator: (str) => _emailValidation,
                         ),
                         TextFormField(
-                          validator: (str) => _passwordValidator(str),
+                          validator: (str) => _passwordValidation,
                           controller: passwordController,
                           obscureText: true,
                           decoration: InputDecoration(
@@ -134,15 +158,7 @@ class _LoginState extends State<Login> {
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(25),
                     ),
-                    onPressed: () {
-                      if (_formKey.currentState.validate()) {
-                        this.widget.loginFn(
-                              emailController.text,
-                              passwordController.text,
-                              context,
-                            );
-                      }
-                    },
+                    onPressed: _login,
                     color: Colors.green,
                     textColor: Colors.white,
                     child: Row(

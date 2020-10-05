@@ -120,28 +120,34 @@ class _GameState extends State<Game> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: _randomizedAnswers
                               .elementAt(inx)
-                              .map((btnText) => Container(
-                                    margin: EdgeInsets.only(bottom: 10),
-                                    child: FlatButton(
-                                      onPressed: () => _onPressed(
-                                        super
-                                            .widget
-                                            .questions
-                                            .elementAt(inx)
-                                            .correctAnswer,
-                                        btnText,
-                                      ),
-                                      color: _colorizeButton(btnText),
-                                      padding: EdgeInsets.symmetric(
-                                        vertical: 20,
-                                        horizontal: 10,
-                                      ),
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(25),
-                                      ),
-                                      child: Text(btnText, style: TextStyle()),
+                              .map(
+                                (btnText) => Container(
+                                  width: MediaQuery.of(context).size.width,
+                                  margin: EdgeInsets.only(bottom: 10),
+                                  child: FlatButton(
+                                    onPressed: () => _onPressed(
+                                      super
+                                          .widget
+                                          .questions
+                                          .elementAt(inx)
+                                          .correctAnswer,
+                                      btnText,
                                     ),
-                                  ))
+                                    color: _colorizeButton(btnText),
+                                    padding: EdgeInsets.symmetric(
+                                      vertical: 20,
+                                      horizontal: 10,
+                                    ),
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(25),
+                                    ),
+                                    child: Text(
+                                      btnText,
+                                      textAlign: TextAlign.center,
+                                    ),
+                                  ),
+                                ),
+                              )
                               .toList(),
                         ),
                       ),

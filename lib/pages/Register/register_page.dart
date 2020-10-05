@@ -1,6 +1,7 @@
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_teste/pages/Login/login_page.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter_teste/service/RealtimeDBApi.dart';
 
 class Register extends StatefulWidget {
   final Function loginFn;
@@ -11,26 +12,39 @@ class Register extends StatefulWidget {
 }
 
 class _RegisterState extends State<Register> {
-  final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
   final _formKey = GlobalKey<FormState>();
 
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
   TextEditingController nameController = TextEditingController();
 
-  _registerPressed() async {
-    final prefs = await _prefs;
+  _registerPressed(context) async {
     if (_formKey.currentState.validate()) {
-      await prefs.setString('EducaIoT:email', emailController.text.trim());
-      await prefs.setString(
-          'EducaIoT:password', passwordController.text.trim());
-      await prefs.setString('EducaIoT:name', nameController.text.trim());
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(
-          builder: (_cntx) => Login(loginFn: this.widget.loginFn),
-        ),
-      );
+      var res = await RealtimeDBApi.api.get(
+          '/users.json?orderBy="email"&equalTo="${emailController.text.trim()}"');
+      if (res.data.toString() != '{}') {
+        Scaffold.of(context).showSnackBar(
+          SnackBar(
+            content: Text(
+              'Email já cadastrado',
+              style: TextStyle(color: Colors.red[100]),
+            ),
+          ),
+        );
+      } else {
+        FirebaseDatabase.instance.reference().child('users').push().set({
+          'name': nameController.text.trim(),
+          'email': emailController.text.trim(),
+          'password': passwordController.text.trim(),
+        }).whenComplete(
+          () => Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+              builder: (_cntx) => Login(loginFn: this.widget.loginFn),
+            ),
+          ),
+        );
+      }
     }
   }
 
@@ -64,9 +78,10 @@ class _RegisterState extends State<Register> {
                       TextFormField(
                         controller: emailController,
                         decoration: InputDecoration(hintText: 'Email'),
+                        keyboardType: TextInputType.emailAddress,
                         validator: (str) {
                           final RegExp emailRegex = new RegExp(
-                            r'\w*@\w*.com',
+                            r'\w*@\w*.\w*',
                             caseSensitive: false,
                           );
                           return emailRegex.hasMatch(str)
@@ -85,7 +100,7 @@ class _RegisterState extends State<Register> {
                 ),
               ),
               RaisedButton(
-                onPressed: _registerPressed,
+                onPressed: () => _registerPressed(context),
                 color: Colors.green,
                 textColor: Colors.white,
                 shape: RoundedRectangleBorder(

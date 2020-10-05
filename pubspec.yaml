@@ -23,6 +23,9 @@ environment:
 dependencies:
   provider: ^4.3.2+2
   shared_preferences: ^0.5.11
+  firebase_database: ^4.0.0
+  dio: ^3.0.10
+  permission_handler: ^5.0.1+1
   flutter:
     sdk: flutter
 

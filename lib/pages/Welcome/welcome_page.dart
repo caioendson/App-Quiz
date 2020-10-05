@@ -49,11 +49,15 @@ class Welcome extends StatelessWidget {
                 borderRadius: BorderRadius.circular(25),
               ),
               onPressed: () => Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (cntx) => Register(
-                            loginFn: loginFn,
-                          ))),
+                context,
+                MaterialPageRoute(
+                  builder: (cntx) => Scaffold(
+                    body: Register(
+                      loginFn: loginFn,
+                    ),
+                  ),
+                ),
+              ),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [

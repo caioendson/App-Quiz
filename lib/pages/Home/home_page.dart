@@ -1,6 +1,11 @@
+import 'dart:math';
+
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_teste/models/QuestionModel.dart';
 import 'package:flutter_teste/pages/Game/game_page.dart';
+import 'package:flutter_teste/service/RealtimeDBApi.dart';
+import 'package:flutter_teste/utils/EducaIoTKeys.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -16,13 +21,51 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
   final Future<SharedPreferences> _pref = SharedPreferences.getInstance();
   String userName;
+  List<Question> _questions;
+
+  _randomize4Questions() {
+    Random random = new Random();
+    List<Question> randomizedQuestions = [];
+
+    for (var inx = 0; inx < 4;) {
+      var randomInt = random.nextInt(this._questions.length);
+      if (!randomizedQuestions.contains(this._questions.elementAt(randomInt))) {
+        randomizedQuestions.add(this._questions.elementAt(randomInt));
+        inx++;
+      }
+    }
+    return randomizedQuestions;
+  }
+
+  _initQuestions() async {
+    var res = await RealtimeDBApi.api.get('/questions.json');
+    var _keys = res.data.keys;
+    List<Question> questions = [];
+    for (var id in _keys) {
+      List<String> wrongs = [];
+      for (var wrong in res.data[id]['wrongsAnswers']) {
+        wrongs.add(wrong);
+      }
+      Question question = new Question(
+        res.data[id]['title'],
+        res.data[id]['correctAnswer'],
+        wrongs,
+      );
+      questions.add(question);
+    }
+    setState(() {
+      _questions = questions;
+    });
+  }
+
   @override
   void initState() {
     _pref.then((prefs) {
       setState(() {
-        userName = prefs.getString('EducaIoT:name');
+        userName = prefs.getString(EducaIoT.name);
       });
     });
+    _initQuestions();
     super.initState();
   }
 
@@ -79,7 +122,7 @@ class _HomeState extends State<Home> {
                   context,
                   MaterialPageRoute(
                     builder: (cntx) => Game(
-                      questions: questionModel.get4Questions(),
+                      questions: _randomize4Questions(),
                     ),
                   ),
                 ),

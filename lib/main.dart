@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_teste/models/QuestionModel.dart';
 import 'package:flutter_teste/pages/Home/home_page.dart';
 import 'package:flutter_teste/pages/Welcome/welcome_page.dart';
+import 'package:flutter_teste/utils/EducaIoTKeys.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 void main() {
   runApp(MyApp());
@@ -45,26 +47,25 @@ class _MyHomePageState extends State<MyHomePage> {
   void initState() {
     super.initState();
     _prefs.then((prefs) {
-      setState(() => isLoged = prefs.getBool('EducaIoT:isLoged') ?? false);
+      setState(() => isLoged = prefs.getBool(EducaIoT.isLoged) ?? false);
     });
+    Permission.storage.request();
   }
 
   _exitFn() async {
     final prefs = await _prefs;
-    prefs.setBool('EducaIoT:isLoged', false);
+    prefs.setBool(EducaIoT.isLoged, false);
     setState(() => isLoged = false);
   }
 
-  _loginFn(String email, String password, BuildContext cnt) async {
+  _loginFn(String email, String password, String name, BuildContext cnt) async {
     final prefs = await _prefs;
-    final storagedEmail = prefs.getString('EducaIoT:email');
-    final storagedPassword = prefs.getString('EducaIoT:password');
-    print('$storagedEmail   $storagedPassword');
-    if (storagedEmail == email.trim() && storagedPassword == password.trim()) {
-      setState(() => isLoged = true);
-      prefs.setBool('EducaIoT:isLoged', true);
-      Navigator.pop(cnt);
-    }
+    prefs.setString(EducaIoT.email, email);
+    prefs.setString(EducaIoT.password, password);
+    prefs.setString(EducaIoT.name, name);
+    setState(() => isLoged = true);
+    prefs.setBool(EducaIoT.isLoged, true);
+    Navigator.pop(cnt);
   }
 
   @override
@@ -73,7 +74,7 @@ class _MyHomePageState extends State<MyHomePage> {
       backgroundColor: Theme.of(context).backgroundColor,
       body: isLoged == null
           ? Center(
-              child: CircularProgressIndicator(),
+              child: CircularProgressIndicator(value: -1),
             )
           : isLoged
               ? Home(exitFn: _exitFn)

@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "625880343864",
+    "firebase_url": "https://educa-iot.firebaseio.com",
+    "project_id": "educa-iot",
+    "storage_bucket": "educa-iot.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:625880343864:android:2da0ba2207b5787a2ecdcd",
+        "android_client_info": {
+          "package_name": "com.example.flutter_teste"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "625880343864-h0rgfvajp56d0rd7jkj11996vkuj897v.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDzqc0_ViQmQztCZMJnF_M889myI6plQMU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "625880343864-h0rgfvajp56d0rd7jkj11996vkuj897v.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
