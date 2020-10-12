@@ -56,8 +56,11 @@ Nessa telas serão exibidas as perguntas ao usuário, a resposta ficará verde s
 
 # Tela de estatística da jogada.
 
-Nessa tela serão exibidas as informações referente a jogada do usuário. Dáí ele pode finalizar e iniciar outra jogada.
+Nessa tela serão exibidas as informações referente a jogada do usuário. Daí ele pode finalizar e iniciar outra jogada.
 
 ![TelaEstatisticas](https://user-images.githubusercontent.com/70185017/95693439-c042c000-0c02-11eb-9465-5a7a038f129a.jpg)
 
+# Tela de Navegabilidade do APP
+
+![navegabilidade](https://user-images.githubusercontent.com/70185017/95694283-9cce4400-0c07-11eb-97d4-24779c347023.PNG)
 
