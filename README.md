@@ -12,7 +12,7 @@ Praticar e testar conhecimentos respondendo a perguntas em um aplicativo de ques
 
 •	Despertar o interesse pelo o tema abordado;
 
-•	Incentivar a pesquisa sobre a área abordada no quiz.
+•	Incentivar a pesquisa sobre a área abordada no quiz;
 
 •	Reforçar os conhecimentos pré-existentes sobre o tema.
 
