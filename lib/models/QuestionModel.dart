@@ -1,4 +1,5 @@
 import "dart:collection";
+import 'dart:convert';
 import "dart:math";
 
 import "package:flutter/foundation.dart";
@@ -74,4 +75,43 @@ class Question {
 
   Question(this.title, this.correctAnswer, this.wrongAnswers,
       [this.isTrueOrFalse]);
+
+  String _map() {
+    Map<String, String> mapDoubleQuote = {};
+    for (var index = 0; index < this.wrongAnswers.length; index++) {
+      mapDoubleQuote.putIfAbsent(
+          '\$$index\$', () => '\$${this.wrongAnswers.elementAt(index)}\$');
+    }
+    return mapDoubleQuote.toString();
+  }
+
+  static List<String> _mapDecode(String str) {
+    var jsonDoubleQuote = json.decode(str.replaceAll('\$', '"'));
+    List<String> wrongs = [];
+    for (var key in jsonDoubleQuote.keys) {
+      wrongs.add(jsonDoubleQuote[key]);
+    }
+    return wrongs;
+  }
+
+  @override
+  String toString() {
+    Map<String, String> arr = {
+      '"title"': '"${this.title}"',
+      '"correctAnswer"': '"${this.correctAnswer}"',
+      '"wrongAnswers"': '"${_map()}"',
+    };
+    return arr.toString();
+  }
+
+  static Question parse(String str) {
+    var map = json.decode(str);
+    var question = new Question(
+        map['title'],
+        map['correctAnswer'],
+        _mapDecode(
+          map['wrongAnswers'],
+        ));
+    return question;
+  }
 }

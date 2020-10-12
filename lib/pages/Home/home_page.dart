@@ -38,24 +38,41 @@ class _HomeState extends State<Home> {
   }
 
   _initQuestions() async {
-    var res = await RealtimeDBApi.api.get('/questions.json');
-    var _keys = res.data.keys;
-    List<Question> questions = [];
-    for (var id in _keys) {
-      List<String> wrongs = [];
-      for (var wrong in res.data[id]['wrongsAnswers']) {
-        wrongs.add(wrong);
+    try {
+      var res = await RealtimeDBApi.api.get('/questions.json');
+      var _keys = res.data.keys;
+      List<Question> questions = [];
+      for (var id in _keys) {
+        List<String> wrongs = [];
+        for (var wrong in res.data[id]['wrongsAnswers']) {
+          wrongs.add(wrong);
+        }
+        Question question = new Question(
+          res.data[id]['title'],
+          res.data[id]['correctAnswer'],
+          wrongs,
+        );
+        questions.add(question);
       }
-      Question question = new Question(
-        res.data[id]['title'],
-        res.data[id]['correctAnswer'],
-        wrongs,
-      );
-      questions.add(question);
+      setState(() {
+        _questions = questions;
+      });
+      List<String> questionToStorage = [];
+      for (var q in questions) {
+        questionToStorage.add(q.toString());
+      }
+      var pref = await _pref;
+      pref.setStringList(EducaIoT.questions, questionToStorage);
+    } catch (err) {
+      List<Question> questions = [];
+      var pref = await _pref;
+      for (var quest in pref.getStringList(EducaIoT.questions)) {
+        questions.add(Question.parse(quest));
+      }
+      setState(() {
+        _questions = questions;
+      });
     }
-    setState(() {
-      _questions = questions;
-    });
   }
 
   @override
