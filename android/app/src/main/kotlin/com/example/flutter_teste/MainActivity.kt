@@ -1,4 +1,4 @@
-package com.example.flutter_teste
+package com.caio.educaiot
 
 import io.flutter.embedding.android.FlutterActivity
 

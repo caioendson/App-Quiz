@@ -39,12 +39,22 @@ android {
 
     defaultConfig {
         // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
-        applicationId "com.example.flutter_teste"
+        applicationId "com.caio.educaiot"
         minSdkVersion 16
         targetSdkVersion 28
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
     }
+
+    signingConfigs {
+        release {
+            storeFile file("release.keystore")
+            storePassword "220795"
+            keyAlias "caioeducaiot"
+            keyPassword "220795"
+        }
+    }
+
 
     buildTypes {
         release {

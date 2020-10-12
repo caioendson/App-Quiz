@@ -8,9 +8,9 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:625880343864:android:2da0ba2207b5787a2ecdcd",
+        "mobilesdk_app_id": "1:625880343864:android:93d6dff1e575d2e32ecdcd",
         "android_client_info": {
-          "package_name": "com.example.flutter_teste"
+          "package_name": "com.caio.educaiot"
         }
       },
       "oauth_client": [
