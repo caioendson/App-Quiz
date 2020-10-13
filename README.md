@@ -1,6 +1,12 @@
 # Quiz App Educacional sobre Internet das Coisas
 
-EducaIot
+Educa IoT
+
+## Breve descrição
+
+App criado durante a disciplina de Fundamentos de Programação Aplicada, sob a orientação do Prof. Gilberto Cysneiros.
+
+Mestrado em Informática Aplicada, UFRPE.
 
 ## Objetivo: 
 
