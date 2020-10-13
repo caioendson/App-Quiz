@@ -24,19 +24,19 @@ Alunos da Rede pública e privada.
 
 ## Tela Inicial do aplicativo
 
-Primeira tela que será exibida para o usuário. Nela, o usuário terá duas opções: realizar o login,  quando já feito o cadastro ou realizar o cadastro.
+Primeira tela que será exibida para o usuário. Nela, o usuário terá duas opções: realizar o login,  quando já feito o cadastro ou realizar o cadastro com um email e uma senha.
 
 ![TelaInicial_Easy-Resize com](https://user-images.githubusercontent.com/70185017/95695085-d1dc9580-0c0b-11eb-989c-bf9a0e7a55fb.jpg)
 
 ## Tela de Cadastro
 
-Nessa tela o usuário irá realizar o seu cadastro por meio de um nome, email e uma senha de acesso.
+Na tela de cadastro, o usuário ira cadastra-se com um nome, email e uma senha de acesso.
 
 ![TelaCadastro_Easy-Resize com](https://user-images.githubusercontent.com/70185017/95695086-d2752c00-0c0b-11eb-96de-8b4ed8a5aa2b.jpg)
 
 ## Tela de Login do app
 
-Aqui o usuário ira realizar o login no app com email e senha cadastrados posteriormente.
+Aqui o usuário ira realizar o login no app com email e senha cadastrados.
 
 ![TelaLogin_Easy-Resize com](https://user-images.githubusercontent.com/70185017/95695093-d3a65900-0c0b-11eb-87d6-f15b402a0273.jpg)
 
