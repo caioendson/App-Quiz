@@ -30,7 +30,7 @@ Primeira tela que será exibida para o usuário. Nela, o usuário terá duas op�
 
 ## Tela de Cadastro
 
-Na tela de cadastro, o usuário ira cadastra-se com um nome, email e uma senha de acesso.
+Na tela de cadastro, o usuário irá cadastrar-se com um nome, email e uma senha de acesso.
 
 ![TelaCadastro_Easy-Resize com](https://user-images.githubusercontent.com/70185017/95695086-d2752c00-0c0b-11eb-96de-8b4ed8a5aa2b.jpg)
 
